@@ -71,7 +71,7 @@ function Auth({ isModel = false }) {
 
 
             // Save user in Redux
-            dispatch(setUserData(result.data));
+            dispatch(setUserData(result.data.user || result.data));
 
 
             console.log("LOGIN SUCCESS");
