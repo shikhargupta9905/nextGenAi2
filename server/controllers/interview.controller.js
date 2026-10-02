@@ -203,21 +203,20 @@ Return ONLY valid JSON.
       score: 0,
       report: ""
     });
+    let creditsLeft;
     try {
-  await deductCredits(userId, 10);
-} catch (error) {
-  await Interview.findByIdAndDelete(interview._id);
-
-  return res.status(400).json({
-    message: error.message
-  });
-}
+      creditsLeft = await deductCredits(userId, 10);
+    } catch (error) {
+      await Interview.findByIdAndDelete(interview._id);
+      return res.status(400).json({ message: error.message });
+    }
 
     return res.status(201).json({
       message:
         "Interview created successfully",
 
       interviewId: interview._id,
+      creditsLeft,
 
       interview: {
         id: interview._id,
@@ -337,6 +336,7 @@ Rules:
     }
 
     question.feedback = evaluation.feedback || "";
+    question.score = Math.max(0, Math.min(10, Number(evaluation.score) || 0));
     await interview.save();
 
     return res.status(200).json({
@@ -502,6 +502,7 @@ Rules:
       );
 
     interview.score = finalScore;
+    interview.status = "completed";
 
     interview.report =
       result.report || "";
@@ -527,7 +528,9 @@ Rules:
         result.weaknesses || [],
 
       recommendation:
-        result.recommendation || ""
+        result.recommendation || "",
+
+      questions: interview.questions
     });
 
   } catch (error) {
