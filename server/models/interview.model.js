@@ -64,6 +64,21 @@ const interviewSchema = new mongoose.Schema(
       default: ""
     },
 
+    strengths: {
+      type: [String],
+      default: []
+    },
+
+    weaknesses: {
+      type: [String],
+      default: []
+    },
+
+    recommendation: {
+      type: String,
+      default: ""
+    },
+
     status: {
       type: String,
       enum: ["in-progress", "completed"],
