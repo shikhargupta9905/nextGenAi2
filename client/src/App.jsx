@@ -40,6 +40,11 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/interview" element={<InterviewPage />} />
             <Route path="/pricing" element={<Pricing />} />   {/* ⬅️ Yahan add karo */}
+            <Route path="/history" element={<InterviewHistory />} />
+            <Route path="/interview-history" element={<InterviewHistory />} />
+            <Route path="/report/:id" element={<InterviewReport />} />
+            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );
 }
