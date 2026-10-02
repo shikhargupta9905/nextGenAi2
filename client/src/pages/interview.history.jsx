@@ -91,7 +91,7 @@ function InterviewHistory() {
                   {/* Score */}
                   <div className="text-right">
                     <p className="text-xl font-bold text-emerald-600">
-                      {item.finalScore || item.score || 0}/10
+                      {item.finalScore || item.score || 0}/100
                     </p>
 
                     <p className="text-sm font-medium text-gray-500">
