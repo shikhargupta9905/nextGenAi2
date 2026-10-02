@@ -109,7 +109,7 @@ function InterviewReport() {
               </p>
 
               <p className="text-4xl font-bold text-emerald-600">
-                {score}/10
+                {score}/100
               </p>
             </div>
 
