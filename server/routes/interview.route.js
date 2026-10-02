@@ -6,6 +6,7 @@ import {
   startInterview,
   submitAnswer,
   generateInterviewReport,
+  getInterviewReport,
   analyzeResume
 } from "../controllers/interview.controller.js";
 
@@ -36,6 +37,12 @@ interviewRouter.post(
   "/report",
   isAuth,
   generateInterviewReport
+);
+
+interviewRouter.get(
+  "/report/:interviewId",
+  isAuth,
+  getInterviewReport
 );
 
 export default interviewRouter;
