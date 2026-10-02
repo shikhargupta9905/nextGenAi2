@@ -11,7 +11,7 @@ import { BsArrowRight } from 'react-icons/bs';
 
 function Step2Interview({ interviewData, onFinish }) {
     const interviewId = interviewData?.interviewId || localStorage.getItem("currentInterviewId");
-    const questions = interviewData?.questions || [];
+    const questions = interviewData?.questions || interviewData?.interview?.questions || [];
     const userRole = interviewData?.userRole;
 
     console.log("Step2 - InterviewId:", interviewId);
@@ -281,7 +281,8 @@ function Step2Interview({ interviewData, onFinish }) {
             stopMic();
             setIsMicOn(false);
             try {
-                const result = await axios.post(ServerUrl + "/api/interview/finish",
+                const result = await axios.post(
+                    ServerUrl + "/api/interview/report",
                     { interviewId },
                     { withCredentials: true }
                 );
