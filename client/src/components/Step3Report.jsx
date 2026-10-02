@@ -1,120 +1,125 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaCheckCircle, FaArrowLeft } from "react-icons/fa";
 
-function InterviewHistory() {
-  const [interviews, setInterviews] = useState([]);
-  const navigate = useNavigate();
+function Step3Report({ report }) {
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const getMyInterviews = async () => {
-      try {
-        const result = await axios.get(
-          ServerUrl + "api/interview/get-interview",
-          {
-            withCredentials: true,
-          }
-        );
+    const score = Number(report?.score ?? report?.finalScore ?? 0);
 
-        console.log(result.data);
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50 py-10 px-4">
+            <div className="max-w-5xl mx-auto">
+                <button
+                    onClick={() => navigate("/")}
+                    className="mb-6 p-3 rounded-full bg-white shadow text-gray-600"
+                    aria-label="Back to home"
+                >
+                    <FaArrowLeft />
+                </button>
 
-        setInterviews(result.data || []);
-      } catch (error) {
-        console.log(error);
-        setInterviews([]);
-      }
-    };
-
-    getMyInterviews();
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50 py-10 px-4">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-10 w-full flex items-start gap-4 flex-wrap">
-          <button
-            onClick={() => navigate(-1)}
-            className="mt-1 p-3 rounded-full bg-white shadow hover:shadow-md transition text-gray-600"
-          >
-            <FaArrowLeft />
-          </button>
-
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">
-              Interview History
-            </h1>
-
-            <p className="text-gray-500 mt-2">
-              Track your past interviews and performance reports
-            </p>
-          </div>
-        </div>
-
-        {/* No interviews */}
-        {interviews.length === 0 ? (
-          <div className="bg-white p-10 rounded-2xl shadow text-center">
-            <p className="text-gray-500">
-              No interviews found. Start your first interview.
-            </p>
-          </div>
-        ) : (
-          /* Interview list */
-          <div className="grid gap-3">
-            {interviews.map((item, index) => (
-              <div
-                key={item._id || index}
-                className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100"
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                  {/* Interview details */}
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {item.role || item.jobRole || "Interview"}
-                    </h3>
-
-                    <p className="text-gray-500 text-sm mt-1">
-                      {item.experience || 0} years ·{" "}
-                      {item.mode || "N/A"}
-                    </p>
-
-                    <p className="text-xs text-gray-400 mt-2">
-                      {new Date(
-                        item.createdAt || item.createAt || Date.now()
-                      ).toLocaleDateString()}
-                    </p>
-                  </div>
-
-                  {/* Score */}
-                  <div className="text-right">
-                    <p className="text-xl font-bold text-emerald-600">
-                      {item.finalScore || item.score || 0}/10
-                    </p>
-
-                    <p className="text-sm font-medium text-gray-500">
-                      Overall Score
-                    </p>
-                  </div>
-
-                  {/* Status */}
-                  <span
-                    className={`px-4 py-1 rounded-full text-xs font-medium ${
-                      item.status === "completed"
-                        ? "bg-emerald-100 text-emerald-700"
-                        : "bg-yellow-100 text-yellow-700"
-                    }`}
-                  >
-                    {item.status || "completed"}
-                  </span>
+                <div className="bg-white rounded-2xl shadow-md p-8 mb-6">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                        <div>
+                            <p className="text-sm text-emerald-600 font-semibold uppercase tracking-wide">
+                                Interview Complete
+                            </p>
+                            <h1 className="text-3xl font-bold text-gray-800 mt-2">
+                                Your AI Interview Report
+                            </h1>
+                            <p className="text-gray-500 mt-2">
+                                Review your performance and use the feedback to improve.
+                            </p>
+                        </div>
+                        <div className="text-center bg-emerald-50 px-8 py-5 rounded-2xl">
+                            <p className="text-sm text-gray-500">Overall Score</p>
+                            <p className="text-4xl font-bold text-emerald-600">{score}/100</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                    <div className="bg-white rounded-2xl shadow-md p-6">
+                        <h2 className="text-xl font-bold text-gray-800 mb-3">Summary</h2>
+                        <p className="text-gray-600 leading-7">
+                            {report?.report || "No summary was generated."}
+                        </p>
+                    </div>
+
+                    <div className="bg-white rounded-2xl shadow-md p-6">
+                        <h2 className="text-xl font-bold text-gray-800 mb-3">Recommendation</h2>
+                        <p className="text-gray-600 leading-7">
+                            {report?.recommendation || "Keep practicing and review the question-wise feedback."}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                    <div className="bg-white rounded-2xl shadow-md p-6">
+                        <h2 className="text-xl font-bold text-gray-800 mb-3">Strengths</h2>
+                        {report?.strengths?.length ? (
+                            <ul className="space-y-2">
+                                {report.strengths.map((item, index) => (
+                                    <li key={index} className="text-gray-600">• {item}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500">No strengths were returned.</p>
+                        )}
+                    </div>
+
+                    <div className="bg-white rounded-2xl shadow-md p-6">
+                        <h2 className="text-xl font-bold text-gray-800 mb-3">Areas to Improve</h2>
+                        {report?.weaknesses?.length ? (
+                            <ul className="space-y-2">
+                                {report.weaknesses.map((item, index) => (
+                                    <li key={index} className="text-gray-600">• {item}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500">No improvement areas were returned.</p>
+                        )}
+                    </div>
+                </div>
+
+                {report?.questions?.length > 0 && (
+                    <div className="space-y-4">
+                        <h2 className="text-xl font-bold text-gray-800">Question-wise Performance</h2>
+                        {report.questions.map((question, index) => (
+                            <div key={question._id || index} className="bg-white rounded-2xl shadow-md p-6">
+                                <div className="flex gap-3">
+                                    <FaCheckCircle className="text-emerald-500 mt-1" />
+                                    <div className="flex-1">
+                                        <h3 className="font-semibold text-gray-800">Question {index + 1}</h3>
+                                        <p className="text-gray-700 mt-2">{question.question}</p>
+                                        {question.answer && (
+                                            <p className="text-gray-600 mt-3 whitespace-pre-line">
+                                                <strong>Your answer:</strong> {question.answer}
+                                            </p>
+                                        )}
+                                        {question.feedback && (
+                                            <p className="text-gray-600 mt-3 whitespace-pre-line">
+                                                <strong>Feedback:</strong> {question.feedback}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                <div className="mt-8 text-center">
+                    <button
+                        onClick={() => navigate("/interview")}
+                        className="px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700"
+                    >
+                        Start Another Interview
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 }
 
-export default InterviewHistory;
+export default Step3Report;
