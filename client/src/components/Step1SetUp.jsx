@@ -100,7 +100,7 @@ function Step1SetUp({ onStart }) {
                 dispatch(
                     setUserData({
                         ...userData,
-                        credits: result.data.creditsLeft
+                        credits: result.data.creditsLeft ?? userData.credits
                     })
                 );
             }
@@ -116,7 +116,10 @@ function Step1SetUp({ onStart }) {
             // ⬇️ Pass data to InterviewPage
             onStart({
                 ...result.data,
-                interviewId: result.data.interviewId || localStorage.getItem("currentInterviewId")
+                ...result.data.interview,
+                interviewId: result.data.interviewId || result.data.interview?.id || localStorage.getItem("currentInterviewId"),
+                questions: result.data.questions || result.data.interview?.questions || [],
+                userName: result.data.userName || userData?.name || "Candidate"
             });
 
         } catch (error) {
@@ -231,7 +234,7 @@ function Step1SetUp({ onStart }) {
                                 <input
                                     type='file'
                                     id='resumeUpload'
-                                    accept='.pdf,.doc,.docx'
+                                    accept='.pdf'
                                     className='hidden'
                                     onChange={(e) => {
                                         const file = e.target.files[0];
@@ -248,7 +251,7 @@ function Step1SetUp({ onStart }) {
                                     <p className='text-sm text-gray-700 font-medium'>
                                         {resumeFile
                                             ? resumeFile.name
-                                            : "Click to upload resume (Optional)"
+                                            : "Click to upload resume (PDF required)"
                                         }
                                     </p>
                                 </label>
