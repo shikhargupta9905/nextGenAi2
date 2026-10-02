@@ -251,7 +251,7 @@ function Step1SetUp({ onStart }) {
                                     <p className='text-sm text-gray-700 font-medium'>
                                         {resumeFile
                                             ? resumeFile.name
-                                            : "Click to upload resume (PDF required)"
+                                            : "Click to upload resume (PDF, optional)"
                                         }
                                     </p>
                                 </label>
