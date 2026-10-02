@@ -78,7 +78,7 @@ function InterviewHistory() {
 
                     <p className="text-gray-500 text-sm mt-1">
                       {item.experience || 0} years ·{" "}
-                      {item.mode || "N/A"}
+                      {item.interviewType || item.mode || "N/A"}
                     </p>
 
                     <p className="text-xs text-gray-400 mt-2">
