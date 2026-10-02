@@ -99,7 +99,7 @@ function InterviewReport() {
 
               <p className="text-gray-500 mt-2">
                 {report.experience || 0} years experience ·{" "}
-                {report.mode || "N/A"}
+                {report.interviewType || report.mode || "N/A"}
               </p>
             </div>
 
