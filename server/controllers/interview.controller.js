@@ -534,6 +534,12 @@ Rules:
 
     interview.report =
       result.report || "";
+    interview.strengths =
+      Array.isArray(result.strengths) ? result.strengths : [];
+    interview.weaknesses =
+      Array.isArray(result.weaknesses) ? result.weaknesses : [];
+    interview.recommendation =
+      result.recommendation || "";
 
     await interview.save();
 
